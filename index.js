@@ -87,8 +87,8 @@ async function crawlSites(domains) {
     let productUrls = [];
 
     // If pagination is used, we first start with the base page
-    const startUrl = domain; // You can adjust based on how the domain works
-    productUrls = await crawlPagination(domain, startUrl);
+    const startUrl = domain; // can adjust based on how the domain works
+    productUrls = await crawlPagination(domain, startUrl); //initially domain is the startUrl
     productUrls = [...new Set(productUrls)];
     console.log(productUrls);
     console.log(`Found ${productUrls.length} unique product URLs:`);
