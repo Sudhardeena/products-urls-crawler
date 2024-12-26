@@ -102,7 +102,9 @@ async function crawlSites(domains) {
 }
 
 app.get("/", (req, res) => {
-  res.send("Welcome");
+  res.send(
+    "Welcome, viste https://products-urls-crawler.onrender.com/crawl to view products list"
+  );
 });
 
 app.get("/crawl", async (req, res) => {
