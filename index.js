@@ -4,6 +4,8 @@ const cheerio = require("cheerio");
 const { URL } = require("url");
 const express = require("express");
 
+const port = process.env.PORT || 8000;
+
 const app = express();
 
 // Function to crawl the static websites with axios and cheerio tools
@@ -21,10 +23,10 @@ async function crawlStaticSite(domain) {
     $("a").each((index, element) => {
       const href = $(element).attr("href");
       if (href) {
-        const url = new URL(href, domain); // Resolve relative URLs
+        const url = new URL(href, domain);
         const path = url.pathname.toLowerCase();
 
-        // Check if the URL path matches any known product patterns
+        // Checking the URL path match any product patterns
         if (productPatterns.some((pattern) => path.includes(pattern))) {
           productUrls.push(url.href);
         }
@@ -36,7 +38,7 @@ async function crawlStaticSite(domain) {
   return productUrls;
 }
 
-// Function to handle pagination (if applicable)
+// Function to handle pagination (if pagination is presented in current page)
 async function crawlPagination(domain, startUrl) {
   let allUrls = [];
   let currentPage = startUrl;
@@ -72,7 +74,7 @@ async function crawlPagination(domain, startUrl) {
   return allUrls;
 }
 
-// Main function to crawl multiple sites
+// function logic to crawl multiple sites
 async function crawlSites(domains) {
   let allProductUrls = [];
 
@@ -92,14 +94,18 @@ async function crawlSites(domains) {
     console.log(`Found ${productUrls.length} unique product URLs:`);
     console.log("**************************");
 
-    // Remove duplicates and add to the final list
+    // Removing duplicates and adding to the final list of products
     allProductUrls = [...allProductUrls, { [domain]: productUrls }];
   }
 
   return allProductUrls;
 }
 
-app.get("/", async (req, res) => {
+app.get("/", (req, res) => {
+  res.send("Welcome");
+});
+
+app.get("/crawl", async (req, res) => {
   // list of domains
   const domains = [
     "https://www.amazon.in/gp/bestsellers/?ref_=nav_cs_bestsellers",
@@ -123,4 +129,4 @@ app.get("/", async (req, res) => {
   }
 });
 
-app.listen(3000, () => console.log("app is running on port 3000"));
+app.listen(port, () => console.log(`app is running on port ${port}`));
